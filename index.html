@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎来到LiveBBS喵~</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+    <!-- SEO 优化 -->
+    <meta name="description" content="LiveBBS - 展示RMDCXY所有项目的个人小站喵~">
+    <meta name="keywords" content="LiveBBS, livebbs, RMDCXY, rmdcxy, cxy">
+    <meta name="author" content="RMDCXY">
+    <meta name="robots" content="index, follow">
+    <!-- Open Graph -->
+    <meta property="og:title" content="LiveBBS">
+    <meta property="og:description" content="欢迎访问RMDCXY的个人小站LiveBBS喵~">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="img/avatar.png">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LiveBBS">
+    <meta name="twitter:description" content="欢迎访问RMDCXY的个人小站LiveBBS喵~">
+    <meta name="twitter:image" content="img/avatar.png">
+    <!--图标-->
+    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="favicon/site.webmanifest" />
+</head>
+<body>
+    <div class="topbar">
+        <img src="img/logo.png" width="185" id="topbar-logo">
+        <div class="topbar-links">
+            <a id="mailbtn" target="_blank" style="margin: 0;"><img src="/img/mail.svg" width="40"></a>
+            <button onclick="qq()" style="padding: 0;"><img src="/img/qq.svg" width="40"></button>
+            <a href="https://space.bilibili.com/3493142110144946" target="_blank"><img src="/img/bili.svg" width="40"></a>
+        </div>
+    </div>
+    <div class="title">
+        <img src="img/avatar.png" alt="图片加载失败T_T" class="title_img" width="135">
+        <div class="title_text">欢迎来到LiveBBS喵~</div>
+    </div>
+    <span style="color:#1a6fbf; text-align:center; font-size:25px;margin-top:30px;font-family:'Smileysans', Arial, sans-serif;" id="footer-quote"></span>
+    <div class="sections" id="sections-container">
+        <!-- 内容将由 JavaScript 动态生成 -->
+    </div>
+    <footer class="footer">
+        <span style="color:#6f6f6f">除非另有声明，本站所有文章、内容均使用 <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh-hans" target="_blank">CC BY-NC 4.0</a> 协议进行授权。</span>
+        <span style="color:#6f6f6f">Copyright (C) RMDCXY
+            <script type="text/javascript">document.write(new Date().getFullYear());</script>.All rights reserved.
+        </span>
+        <span id="site-uptime" style="color:#6f6f6f">本站已运行....还没计算出来喵~</span>
+        <div>
+            <a href="#" onclick="shouqi()">🎲手气不错</a>
+            <a href="/rss.xml" target="_blank">📡RSS</a>
+	        <a href="https://github.com/RMDCXY/cxybbs" target="_blank">😺GH Repo</a>
+            <a href="/deal.html">用户协议</a>
+            <a href="/policy.html">隐私政策</a>
+            <a href="https://github.com/RMDCXY/cxybbs/issues" target="_blank">意见反馈</a>
+            <a href="/about.html">关于</a>
+            <a href="/admin.html">管理面板</a>
+        </div>
+    </footer>
+    <script>
+        // 默认内容配置
+        const defaultContent = [
+            {
+                id: 'articles',
+                title: '📰LiveBBS专栏',
+                subtitle: '存放一些文章以及碎碎念喵~',
+                link: '/articles',
+                linkText: '立即前往',
+                icon: 'arrow',
+                noImg: true
+            },
+            {
+                id: 'android1.0',
+                title: '2007年的初代安卓长啥样？',
+                subtitle: '本期视频穿越到2007年，看看第一个安卓版本长什么样',
+                link: 'https://www.bilibili.com/video/BV1YY8A6GEPg',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/android1.jpg'
+            },
+            {
+                id: 'cloudphira',
+                title: '✨云·Phira✨',
+                subtitle: '这期视频整活在手机使用巨硬的Windows App远控局域网内的电脑，实现使用手机的触控打Windows端Phira',
+                link: 'https://www.bilibili.com/video/BV1fegk6jEX5/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/cloudphira.png'
+            },
+            {
+                id: '100000dollars',
+                title: '[谷歌翻译20次]dream还我十万美刀中字',
+                subtitle: '本期视频使用谷歌翻译翻译了20次wind的经典著作《dream欠了piggod十万美刀所以他必将追杀dream》',
+                link: 'https://www.bilibili.com/video/BV15m7G6rEKn/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/100000dollars.jpg'
+            },
+            {
+                id: 'dickseep',
+                title: 'DickSeep',
+                subtitle: '本网站为一个伪AI，仅供娱乐，其中包含大量不文明用语与侮辱性语言，谨慎使用！',
+                link: 'https://dickseep.livebbs.top',
+                linkText: '立即前往',
+                icon: 'web',
+                img: 'res/ds.png'
+            },
+            {
+                id: '67encrypt',
+                title: '67加密器',
+                subtitle: '本工具通过二进制以及隐式零宽字符等方式，帮助您将任意字符串转换为67',
+                link: 'https://67.livebbs.top',
+                linkText: '立即前往',
+                icon: 'web',
+                img: 'res/67.png'
+            },
+            {
+                id: 'html2exe',
+                title: '更轻巧！将你的HTML网页打包为单一exe文件',
+                subtitle: '本期视频利用neoEXE工具，将你的HTML网页打包为更轻巧的单一EXE文件',
+                link: 'https://www.bilibili.com/video/BV1ahVr6gEsu/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/html2exe.png'
+            },
+            {
+                id: 'new_directlink',
+                title: '[新]文件直链下载！永久有效！不限速！',
+                subtitle: '告别传统网盘烦恼，真直链！免费！永久有效',
+                link: 'https://www.bilibili.com/video/BV18W9fBJETq/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/zk.png'
+            },
+            {
+                id: '0.5b_aicoding',
+                title: '用0.5b的模型AI编程',
+                subtitle: '这是一期水视频，展示了使用低参数量的0.5b AI模型编写代码的效果。',
+                link: 'https://www.bilibili.com/video/BV1vtFKztEuW/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/aicoding.png'
+            },
+            {
+                id: 'html2app',
+                title: '将HTML打包成应用程序',
+                subtitle: '本期教程以最简单的方法将HTML打包为应用程序，小白看了也能学会。',
+                link: 'https://www.bilibili.com/video/BV1T2gSzhEbF/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/htmltoapp.jpg'
+            },
+            {
+                id: '24dt',
+                title: '个人项目·24DotTool',
+                subtitle: '24DotTool是一个计算24点数学游戏解法的工具，它基于暴力破解算法开发，所以可以快速破解出所有解法。点击"我要下载"可直接免费下载，历史版本提取码24dt。',
+                links: [
+                    { text: '我要下载', href: '/cdn/24DotTool_v14.24_setup.exe', icon: 'download' },
+                    { text: '历史版本', href: 'https://livebbs.lanzoue.com/b00uzjf8xc?密码24dt', icon: 'download' },
+                    { text: 'Github仓库', href: 'https://github.com/RMDCXY/24DotTool/', icon: 'github' }
+                ],
+                img: 'res/24dt.png'
+            },
+            {
+                id: 'falsezl',
+                title: '告别网盘·伪直链',
+                subtitle: '本期教程可以为您创建伪直链，实现跳转链接直接下载，完全免费。',
+                link: 'https://www.bilibili.com/video/BV1hTVJz4Ea9/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/falsezl.jpg'
+            },
+            {
+                id: 'scr2site',
+                title: 'Scratch作品制作成网站',
+                subtitle: '本期教程可以将您的Scratch作品免费制作成一个网站，让更多人可以更快速、更方便地体验您的作品！',
+                link: 'https://www.bilibili.com/video/BV1pWfDYiEge',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/scrtosite.jpg'
+            },
+            {
+                id: 'py2app',
+                title: 'Python打包成应用程序',
+                subtitle: '本期教程可以将您的Python项目打包成一个带安装程序的应用程序，让您的项目更好分享给别人体验。',
+                link: 'https://www.bilibili.com/video/BV1UxmaYwE6D/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/pytoapp.jpg'
+            },
+            {
+                id: 'scr2app',
+                title: 'Scratch打包成应用程序',
+                subtitle: '本期教程可以将您的Scratch项目打包成一个带安装程序的应用程序，让您的项目显得更高级。',
+                link: 'https://www.bilibili.com/video/BV1UxmaYwE6D/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/scrtoapp.jpg'
+            }
+        ];
+
+        // 从 localStorage 获取内容配置
+        function getContent() {
+            const stored = localStorage.getItem('livebbs_home_content');
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            return defaultContent;
+        }
+
+        // 保存内容配置
+        function saveContent(content) {
+            localStorage.setItem('livebbs_home_content', JSON.stringify(content));
+        }
+
+        // 渲染首页内容
+        function renderSections() {
+            const container = document.getElementById('sections-container');
+            const content = getContent();
+            
+            let html = '';
+            content.forEach(item => {
+                if (item.noImg) {
+                    // 无图片卡片
+                    html += `
+                        <div class="section-card no-img" id="${item.id}">
+                            <div class="section-info">
+                                <div class="section-title">${item.title}</div>
+                                <div class="section-subtitle">${item.subtitle || ''}</div>
+                                ${item.link ? `<a href="${item.link}" class="section-link">${item.linkText || '立即前往'}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><path fill="none" stroke="#1a3a5c" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m19 12l12 12l-12 12"/></svg>
+                                </a>` : ''}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // 有图片卡片
+                    const linkHtml = item.links ? 
+                        item.links.map(l => `<a href="${l.href}" target="_blank" class="section-link"><img src="img/${l.icon}.png" width="13"> ${l.text}</a>`).join('') :
+                        `<a href="${item.link}" target="_blank" class="section-link"><img src="img/${item.icon}.svg" width="20"> ${item.linkText || '查看'}</a>`;
+                    
+                    html += `
+                        <div class="section-card" id="${item.id}">
+                            <img src="${item.img}" alt="图片" class="section-img">
+                            <div class="section-info">
+                                <div class="section-title">${item.title}</div>
+                                <div class="section-subtitle">${item.subtitle || ''}</div>
+                                ${linkHtml}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // 页面加载时渲染
+        document.addEventListener('DOMContentLoaded', renderSections);
+    </script>
+    <script src="script.js"></script>
+    <script src="a.js"></script>
+</body>
+</html>

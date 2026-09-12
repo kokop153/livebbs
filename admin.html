@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>LiveBBS 管理面板</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 100px auto 40px;
+            padding: 0 20px;
+        }
+        .admin-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .admin-header h1 {
+            font-family: 'Smileysans', sans-serif;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #1a6fbf, #4a9eff, #1a3a5c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .admin-tab {
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 2px solid rgba(26, 111, 191, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Smileysans', sans-serif;
+            font-size: 16px;
+            color: #1a3a5c;
+            transition: all 0.2s;
+        }
+        .admin-tab:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #4a9eff;
+        }
+        .admin-tab.active {
+            background: linear-gradient(135deg, #4a9eff, #1a6fbf);
+            color: #fff;
+            border-color: transparent;
+        }
+        .admin-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(224, 244, 252, 0.75));
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 24px rgba(26, 58, 92, 0.15);
+            backdrop-filter: blur(10px);
+        }
+        .admin-section h2 {
+            font-family: 'Smileysans', sans-serif;
+            color: #1a3a5c;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid rgba(26, 111, 191, 0.2);
+            padding-bottom: 10px;
+        }
+        .admin-form-group {
+            margin-bottom: 16px;
+        }
+        .admin-form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #2c5a8c;
+            font-weight: bold;
+        }
+        .admin-form-group input,
+        .admin-form-group textarea,
+        .admin-form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid rgba(26, 111, 191, 0.3);
+            border-radius: 10px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #1a3a5c;
+            box-sizing: border-box;
+        }
+        .admin-form-group input:focus,
+        .admin-form-group textarea:focus,
+        .admin-form-group select:focus {
+            outline: none;
+            border-color: #4a9eff;
+            box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2);
+        }
+        .admin-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #4a9eff, #1a6fbf);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 8px rgba(26, 111, 191, 0.3);
+        }
+        .admin-btn:hover {
+            background: linear-gradient(135deg, #3a8eef, #0d5fa0);
+            box-shadow: 0 4px 12px rgba(26, 111, 191, 0.4);
+            transform: translateY(-2px);
+        }
+        .admin-btn.danger {
+            background: linear-gradient(135deg, #ff6b6b, #c92a2a);
+            box-shadow: 0 3px 8px rgba(201, 42, 42, 0.3);
+        }
+        .admin-btn.danger:hover {
+            box-shadow: 0 4px 12px rgba(201, 42, 42, 0.4);
+        }
+        .admin-btn.success {
+            background: linear-gradient(135deg, #51cf66, #2f9e44);
+            box-shadow: 0 3px 8px rgba(47, 158, 68, 0.3);
+        }
+        .admin-btn.success:hover {
+            box-shadow: 0 4px 12px rgba(47, 158, 68, 0.4);
+        }
+        .admin-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .admin-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(26, 111, 191, 0.1);
+            transition: all 0.2s;
+        }
+        .admin-list-item:hover {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(26, 111, 191, 0.1);
+        }
+        .admin-list-item .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .admin-list-item .item-title {
+            font-weight: bold;
+            color: #1a3a5c;
+            font-size: 16px;
+        }
+        .admin-list-item .item-subtitle {
+            font-size: 13px;
+            color: #6f6f6f;
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .admin-list-item .item-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: 16px;
+        }
+        .admin-list-item .item-actions button {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+        .admin-toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #51cf66, #2f9e44);
+            color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+        .admin-modal.show {
+            display: flex;
+        }
+        .admin-modal-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(224, 244, 252, 0.9));
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(26, 58, 92, 0.3);
+        }
+        .admin-modal-content h3 {
+            font-family: 'Smileysans', sans-serif;
+            color: #1a3a5c;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        .admin-modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        .drag-handle {
+            cursor: move;
+            color: #1a6fbf;
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        .admin-hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <img src="img/logo.png" width="185" id="topbar-logo">
+        <div class="topbar-links">
+            <a href="/" style="margin-left: auto; margin-right: 10px;">返回首页</a>
+            <a href="https://space.bilibili.com/3493142110144946" target="_blank"><img src="/img/bili.svg" width="40"></a>
+        </div>
+    </div>
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>🛠️ LiveBBS 管理面板</h1>
+            <p style="color: #6f6f6f;">在这里管理你的网站内容</p>
+        </div>
+
+        <!-- 标签导航 -->
+        <div class="admin-tabs">
+            <div class="admin-tab active" data-tab="home">🏠 首页内容</div>
+            <div class="admin-tab" data-tab="footer">📝 底部设置</div>
+            <div class="admin-tab" data-tab="danger">⚠️ 危险操作</div>
+        </div>
+
+        <!-- 首页内容管理 -->
+        <div class="admin-section" id="tab-home">
+            <h2>📊 首页卡片管理</h2>
+            <div style="margin-bottom: 20px;">
+                <button class="admin-btn" onclick="showAddModal()">➕ 添加新卡片</button>
+                <button class="admin-btn success" onclick="resetToDefault()">🔄 恢复默认</button>
+            </div>
+            <div class="admin-list" id="content-list">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 底部设置 -->
+        <div class="admin-section admin-hidden" id="tab-footer">
+            <h2>📝 底部设置</h2>
+            <div class="admin-form-group">
+                <label for="footer-quote">底部轮播文字（多条用 | 分隔）</label>
+                <textarea id="footer-quote" rows="4" placeholder="输入底部显示的轮播文字"></textarea>
+            </div>
+            <button class="admin-btn" onclick="saveFooterQuote()">💾 保存设置</button>
+        </div>
+
+        <!-- 危险操作 -->
+        <div class="admin-section admin-hidden" id="tab-danger">
+            <h2>⚠️ 危险操作</h2>
+            <p style="color: #6f6f6f; margin-bottom: 20px;">以下操作不可逆，请谨慎操作！</p>
+            <button class="admin-btn danger" onclick="clearAllData()">🗑️ 清空所有数据</button>
+        </div>
+    </div>
+
+    <!-- 添加/编辑卡片弹窗 -->
+    <div class="admin-modal" id="card-modal">
+        <div class="admin-modal-content">
+            <h3 id="modal-title">添加新卡片</h3>
+            <input type="hidden" id="edit-index" value="-1">
+            
+            <div class="admin-form-group">
+                <label>卡片类型</label>
+                <select id="card-type" onchange="toggleCardType()">
+                    <option value="noImg">无图片卡片（如专栏入口）</option>
+                    <option value="withImg">有图片卡片（视频/项目）</option>
+                </select>
+            </div>
+
+            <div class="admin-form-group">
+                <label for="card-id">唯一标识 ID</label>
+                <input type="text" id="card-id" placeholder="如: my-new-card">
+            </div>
+
+            <div class="admin-form-group">
+                <label for="card-title">标题</label>
+                <input type="text" id="card-title" placeholder="输入卡片标题">
+            </div>
+
+            <div class="admin-form-group">
+                <label for="card-subtitle">副标题/描述</label>
+                <textarea id="card-subtitle" rows="2" placeholder="输入简短描述"></textarea>
+            </div>
+
+            <!-- 无图片卡片选项 -->
+            <div id="no-img-options">
+                <div class="admin-form-group">
+                    <label for="card-link">链接</label>
+                    <input type="url" id="card-link" placeholder="https://...">
+                </div>
+                <div class="admin-form-group">
+                    <label for="card-link-text">按钮文字</label>
+                    <input type="text" id="card-link-text" placeholder="立即前往" value="立即前往">
+                </div>
+            </div>
+
+            <!-- 有图片卡片选项 -->
+            <div id="with-img-options" class="admin-hidden">
+                <div class="admin-form-group">
+                    <label for="card-img">图片路径</label>
+                    <input type="text" id="card-img" placeholder="res/image.jpg">
+                </div>
+                <div class="admin-form-group">
+                    <label for="card-icon">图标类型</label>
+                    <select id="card-icon">
+                        <option value="bili">B站视频</option>
+                        <option value="web">网页链接</option>
+                        <option value="download">下载</option>
+                        <option value="github">Github</option>
+                    </select>
+                </div>
+                <div class="admin-form-group">
+                    <label for="card-link">链接</label>
+                    <input type="url" id="card-link-img" placeholder="https://...">
+                </div>
+                <div class="admin-form-group">
+                    <label for="card-link-text-img">按钮文字</label>
+                    <input type="text" id="card-link-text-img" placeholder="观看视频">
+                </div>
+            </div>
+
+            <div class="admin-modal-actions">
+                <button class="admin-btn" style="background: #6c757d;" onclick="closeModal()">取消</button>
+                <button class="admin-btn success" onclick="saveCard()">💾 保存</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <span style="color:#6f6f6f">Copyright (C) RMDCXY <script>document.write(new Date().getFullYear());</script>. All rights reserved.</span>
+        <div>
+            <a href="/">返回首页</a>
+            <a href="/about.html">关于</a>
+        </div>
+    </footer>
+
+    <script>
+        // 默认内容配置
+        const defaultContent = [
+            {
+                id: 'articles',
+                title: '📰LiveBBS专栏',
+                subtitle: '存放一些文章以及碎碎念喵~',
+                link: '/articles',
+                linkText: '立即前往',
+                noImg: true
+            },
+            {
+                id: 'android1.0',
+                title: '2007年的初代安卓长啥样？',
+                subtitle: '本期视频穿越到2007年，看看第一个安卓版本长什么样',
+                link: 'https://www.bilibili.com/video/BV1YY8A6GEPg',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/android1.jpg'
+            },
+            {
+                id: 'cloudphira',
+                title: '✨云·Phira✨',
+                subtitle: '这期视频整活在手机使用巨硬的Windows App远控局域网内的电脑',
+                link: 'https://www.bilibili.com/video/BV1fegk6jEX5/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/cloudphira.png'
+            },
+            {
+                id: '100000dollars',
+                title: '[谷歌翻译20次]dream还我十万美刀中字',
+                subtitle: '本期视频使用谷歌翻译翻译了20次wind的经典著作',
+                link: 'https://www.bilibili.com/video/BV15m7G6rEKn/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/100000dollars.jpg'
+            },
+            {
+                id: 'dickseep',
+                title: 'DickSeep',
+                subtitle: '本网站为一个伪AI，仅供娱乐',
+                link: 'https://dickseep.livebbs.top',
+                linkText: '立即前往',
+                icon: 'web',
+                img: 'res/ds.png'
+            },
+            {
+                id: '67encrypt',
+                title: '67加密器',
+                subtitle: '本工具通过二进制以及隐式零宽字符等方式',
+                link: 'https://67.livebbs.top',
+                linkText: '立即前往',
+                icon: 'web',
+                img: 'res/67.png'
+            },
+            {
+                id: 'html2exe',
+                title: '更轻巧！将你的HTML网页打包为单一exe文件',
+                subtitle: '本期视频利用neoEXE工具，将你的HTML网页打包为更轻巧的单一EXE文件',
+                link: 'https://www.bilibili.com/video/BV1ahVr6gEsu/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/html2exe.png'
+            },
+            {
+                id: 'new_directlink',
+                title: '[新]文件直链下载！永久有效！不限速！',
+                subtitle: '告别传统网盘烦恼，真直链！免费！永久有效',
+                link: 'https://www.bilibili.com/video/BV18W9fBJETq/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/zk.png'
+            },
+            {
+                id: '0.5b_aicoding',
+                title: '用0.5b的模型AI编程',
+                subtitle: '这是一期水视频，展示了使用低参数量的0.5b AI模型编写代码的效果。',
+                link: 'https://www.bilibili.com/video/BV1vtFKztEuW/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/aicoding.png'
+            },
+            {
+                id: 'html2app',
+                title: '将HTML打包成应用程序',
+                subtitle: '本期教程以最简单的方法将HTML打包为应用程序，小白看了也能学会。',
+                link: 'https://www.bilibili.com/video/BV1T2gSzhEbF/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/htmltoapp.jpg'
+            },
+            {
+                id: '24dt',
+                title: '个人项目·24DotTool',
+                subtitle: '24DotTool是一个计算24点数学游戏解法的工具',
+                links: [
+                    { text: '我要下载', href: '/cdn/24DotTool_v14.24_setup.exe', icon: 'download' },
+                    { text: '历史版本', href: 'https://livebbs.lanzoue.com/b00uzjf8xc?密码24dt', icon: 'download' },
+                    { text: 'Github仓库', href: 'https://github.com/RMDCXY/24DotTool/', icon: 'github' }
+                ],
+                img: 'res/24dt.png'
+            },
+            {
+                id: 'falsezl',
+                title: '告别网盘·伪直链',
+                subtitle: '本期教程可以为您创建伪直链，实现跳转链接直接下载，完全免费。',
+                link: 'https://www.bilibili.com/video/BV1hTVJz4Ea9/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/falsezl.jpg'
+            },
+            {
+                id: 'scr2site',
+                title: 'Scratch作品制作成网站',
+                subtitle: '本期教程可以将您的Scratch作品免费制作成一个网站',
+                link: 'https://www.bilibili.com/video/BV1pWfDYiEge',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/scrtosite.jpg'
+            },
+            {
+                id: 'py2app',
+                title: 'Python打包成应用程序',
+                subtitle: '本期教程可以将您的Python项目打包成一个带安装程序的应用程序',
+                link: 'https://www.bilibili.com/video/BV1UxmaYwE6D/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/pytoapp.jpg'
+            },
+            {
+                id: 'scr2app',
+                title: 'Scratch打包成应用程序',
+                subtitle: '本期教程可以将您的Scratch项目打包成一个带安装程序的应用程序',
+                link: 'https://www.bilibili.com/video/BV1UxmaYwE6D/',
+                linkText: '观看视频',
+                icon: 'bili',
+                img: 'res/scrtoapp.jpg'
+            }
+        ];
+
+        // 获取内容
+        function getContent() {
+            const stored = localStorage.getItem('livebbs_home_content');
+            return stored ? JSON.parse(stored) : defaultContent;
+        }
+
+        // 保存内容
+        function saveContent(content) {
+            localStorage.setItem('livebbs_home_content', JSON.stringify(content));
+        }
+
+        // 渲染列表
+        function renderList() {
+            const container = document.getElementById('content-list');
+            const content = getContent();
+            
+            if (content.length === 0) {
+                container.innerHTML = '<p style="text-align:center;color:#999;">暂无内容</p>';
+                return;
+            }
+            
+            let html = '';
+            content.forEach((item, index) => {
+                const icon = item.icon || 'web';
+                const link = item.link || '';
+                html += `
+                    <div class="admin-list-item">
+                        <span class="drag-handle">⋮⋮</span>
+                        <div class="item-info">
+                            <div class="item-title">${item.title}</div>
+                            <div class="item-subtitle">${item.subtitle || ''} ${link ? '→ ' + link.substring(0, 30) + (link.length > 30 ? '...' : '') : ''}</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="admin-btn" onclick="editCard(${index})">✏️ 编辑</button>
+                            <button class="admin-btn danger" onclick="deleteCard(${index})">🗑️ 删除</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // 显示添加弹窗
+        function showAddModal() {
+            document.getElementById('modal-title').textContent = '添加新卡片';
+            document.getElementById('edit-index').value = -1;
+            document.getElementById('card-type').value = 'noImg';
+            document.getElementById('card-id').value = '';
+            document.getElementById('card-title').value = '';
+            document.getElementById('card-subtitle').value = '';
+            document.getElementById('card-link').value = '';
+            document.getElementById('card-link-text').value = '立即前往';
+            document.getElementById('card-img').value = '';
+            document.getElementById('card-icon').value = 'bili';
+            document.getElementById('card-link-img').value = '';
+            document.getElementById('card-link-text-img').value = '观看视频';
+            toggleCardType();
+            document.getElementById('card-modal').classList.add('show');
+        }
+
+        // 编辑卡片
+        function editCard(index) {
+            const content = getContent();
+            const item = content[index];
+            
+            document.getElementById('modal-title').textContent = '编辑卡片';
+            document.getElementById('edit-index').value = index;
+            document.getElementById('card-type').value = item.noImg ? 'noImg' : 'withImg';
+            document.getElementById('card-id').value = item.id || '';
+            document.getElementById('card-title').value = item.title || '';
+            document.getElementById('card-subtitle').value = item.subtitle || '';
+            document.getElementById('card-link').value = item.link || '';
+            document.getElementById('card-link-text').value = item.linkText || '立即前往';
+            document.getElementById('card-img').value = item.img || '';
+            document.getElementById('card-icon').value = item.icon || 'bili';
+            document.getElementById('card-link-img').value = item.link || '';
+            document.getElementById('card-link-text-img').value = item.linkText || '观看视频';
+            toggleCardType();
+            document.getElementById('card-modal').classList.add('show');
+        }
+
+        // 切换卡片类型
+        function toggleCardType() {
+            const type = document.getElementById('card-type').value;
+            if (type === 'noImg') {
+                document.getElementById('no-img-options').classList.remove('admin-hidden');
+                document.getElementById('with-img-options').classList.add('admin-hidden');
+            } else {
+                document.getElementById('no-img-options').classList.add('admin-hidden');
+                document.getElementById('with-img-options').classList.remove('admin-hidden');
+            }
+        }
+
+        // 保存卡片
+        function saveCard() {
+            const index = parseInt(document.getElementById('edit-index').value);
+            const type = document.getElementById('card-type').value;
+            
+            const cardData = {
+                id: document.getElementById('card-id').value || 'card-' + Date.now(),
+                title: document.getElementById('card-title').value,
+                subtitle: document.getElementById('card-subtitle').value,
+                noImg: type === 'noImg'
+            };
+            
+            if (type === 'noImg') {
+                cardData.link = document.getElementById('card-link').value;
+                cardData.linkText = document.getElementById('card-link-text').value;
+            } else {
+                cardData.img = document.getElementById('card-img').value;
+                cardData.icon = document.getElementById('card-icon').value;
+                cardData.link = document.getElementById('card-link-img').value;
+                cardData.linkText = document.getElementById('card-link-text-img').value;
+            }
+            
+            const content = getContent();
+            
+            if (index === -1) {
+                content.push(cardData);
+            } else {
+                content[index] = cardData;
+            }
+            
+            saveContent(content);
+            closeModal();
+            renderList();
+            showToast('卡片已保存！');
+        }
+
+        // 删除卡片
+        function deleteCard(index) {
+            if (!confirm('确定要删除这个卡片吗？')) return;
+            
+            const content = getContent();
+            content.splice(index, 1);
+            saveContent(content);
+            renderList();
+            showToast('卡片已删除！');
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('card-modal').classList.remove('show');
+        }
+
+        // 恢复默认
+        function resetToDefault() {
+            if (!confirm('确定要恢复默认内容吗？当前所有修改将被覆盖！')) return;
+            if (!confirm('再次确认：真的要恢复默认？')) return;
+            
+            saveContent(defaultContent);
+            renderList();
+            showToast('已恢复默认内容！');
+        }
+
+        // 保存底部文字
+        function saveFooterQuote() {
+            const quote = document.getElementById('footer-quote').value;
+            localStorage.setItem('livebbs_quote', quote);
+            showToast('底部设置已保存！');
+        }
+
+        // 清空所有数据
+        function clearAllData() {
+            if (!confirm('确定要清空所有数据吗？此操作不可恢复！')) return;
+            if (!confirm('再次确认：真的要清空所有数据？')) return;
+            
+            localStorage.removeItem('livebbs_home_content');
+            localStorage.removeItem('livebbs_quote');
+            localStorage.removeItem('livebbs_content');
+            renderList();
+            showToast('所有数据已清空！');
+        }
+
+        // 显示提示
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'admin-toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 2000);
+        }
+
+        // 标签切换
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const target = this.dataset.tab;
+                document.getElementById('tab-home').classList.toggle('admin-hidden', target !== 'home');
+                document.getElementById('tab-footer').classList.toggle('admin-hidden', target !== 'footer');
+                document.getElementById('tab-danger').classList.toggle('admin-hidden', target !== 'danger');
+            });
+        });
+
+        // 点击弹窗外部关闭
+        document.getElementById('card-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // 页面加载时渲染
+        document.addEventListener('DOMContentLoaded', () => {
+            renderList();
+            
+            // 加载底部文字设置
+            const savedQuote = localStorage.getItem('livebbs_quote');
+            if (savedQuote) {
+                document.getElementById('footer-quote').value = savedQuote;
+            }
+        });
+    </script>
+</body>
+</html>
