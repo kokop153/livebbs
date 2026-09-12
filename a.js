@@ -82,7 +82,7 @@ document.getElementById("mailbtn").addEventListener("click",function(b){
 function qq(){
     var ua = navigator.userAgent;
     var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-    var qqNumber = "3766908125";
+    var qqNumber = "3796110988";
 
     if (isMobile) {
         // 手机端：尝试唤起QQ应用
@@ -94,7 +94,7 @@ function qq(){
 
     setTimeout(()=>{
         if(confirm("如果你没有跳转到QQ添加好友，请点击确定直接复制up的QQ号手动添加。")){
-        copy("3766908125");
+        copy("3796110988");
     }
     },1000);
     
